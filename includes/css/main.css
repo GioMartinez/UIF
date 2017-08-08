@@ -1,0 +1,147 @@
+header{
+	clear:both;
+}
+body{
+	background-color:#F0F0F0;
+}
+.branding{
+	clear:both;
+	height:50px;
+	margin:5px;
+}
+.logo{
+	height:50px;
+	float:left;
+	margin-left:10px;
+	margin-right:10px;
+}
+.footer{
+	position:relative
+	clear:both;
+	height:20px;
+	margin:5px;
+}
+.microfocus{
+	position:absolute;
+	height:20px;
+	left:50%;
+	margin-right:-50%;
+	transform:translate(-50%,-50%)
+}
+.microfocus > img{
+	position:relative;
+	top:5px;
+	height:20px;
+	margin-left:10px;
+}
+a:focus,a:hover{text-decoration:none!important;}
+.logo>img{
+	height:50px;
+}
+.container-fluid{
+	padding-right:5px;
+	padding-left:5px;
+}
+.panel{
+	margin-top:5px;
+	margin-bottom:5px;
+	z-index:-1;
+}
+.panel-heading{
+	padding:4px;
+	width:calc(100% - 12px);
+	position:absolute;
+	border-bottom:1px solid transparent;
+	border-top-left-radius:4px;
+	border-top-right-radius:4px;
+	background-color:#0056B8;
+	color:#FFFCF3;
+}
+.panel-title > a{display:block!important;}
+.panel-group .panel-heading{
+	width:100%;
+	position:relative;
+}
+.panel-sat{
+	background-color:#0056B8;
+}
+.panel-sat .panel-collapse{
+	background-color:#FFFFFF;
+}
+.panel-collapse > .panel-body{
+	border-top:0!important;
+}
+.panel > .panel-body{
+	position:absolute;
+	top:39px;
+	padding:4px;
+	height:calc(100% - 45px);
+	width:calc(100% - 10px);
+}
+.scroll{
+	overflow-y:scroll;
+	width:calc(100% - 12px)!important;
+}
+.panel-small{
+	border-width:1px;
+	border-color:#0056B8;
+	height:100px;
+}
+.panel-medium{
+	border-width:1px;
+	border-color:#0056B8;
+	height:300px;
+}
+.list-group-item{
+	padding:2px 15px;
+	overflow:scroll;
+}
+.srvName{
+	display:block;
+	text-align:left;
+	float:left;
+}
+.srvCond{
+	display:block;
+	text-align:right;
+	float:right;
+}
+.btn{
+	float:left;
+}
+.box{
+	height:calc(100% - 8px);
+	width:calc(100% - 8px);
+	position:absolute;
+	display:block;
+}
+.white{background-color:#FFFFFF;}
+svg{
+	overflow:visible !important;
+}
+.highcharts-container{
+	overflow:visible !important;
+}
+.highcharts-tooltip{
+	position:absolute;
+	z-index:99999;
+}
+.col-xs-1,.col-xs-2,.col-xs-3,.col-xs-4,.col-xs-5,.col-xs-6,.col-xs-7,.col-xs-8,.col-xs-9,.col-xs-10,.col-xs-11,.col-xs-12{
+	height:100%;
+	padding-right:5px;
+	padding-left:5px;
+}
+.btn{
+	padding:1px 6px;
+}
+td i{
+	font-size:24px!important;
+	display:block;
+	text-align:right;
+	float:right;
+}
+a span{
+	display:inline-block;
+	position:absolute;
+	right:0;
+}
