@@ -125,35 +125,6 @@ include_once('includes/php/config.php');
 				</div>
 			</div>
 		</div>
-		<div class="col-xs-12 col-sm-4">
-			<div class="panel panel-medium white">
-				<div class="panel-heading">Servicios en la Nube de Microsoft</div>
-				<div class="panel-body">
-					<div class="col-xs-12">
-						<div class="box" id="7">
-							<table class="table table-hover">
-								<tr>
-									<td>Servicio 1</td>
-									<td><button type="button" class="btn btn-success">OK</button></td>
-									<td>Servicio 2</td>
-									<td><button type="button" class="btn btn-success">OK</button></td>
-									<td>Servicio 3</td>
-									<td><button type="button" class="btn btn-success">OK</button></td>
-								</tr>
-								<tr>
-									<td>Servicio 4</td>
-									<td><button type="button" class="btn btn-success">OK</button></td>
-									<td>Servicio 5</td>
-									<td><button type="button" class="btn btn-success">OK</button></td>
-									<td>Servicio 6</td>
-									<td><button type="button" class="btn btn-success">OK</button></td>
-								</tr>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
 		<div class="col-xs-12 col-sm-8">
 			<div class="panel panel-medium white">
 				<div class="panel-heading">Infraestructura</div>
