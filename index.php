@@ -24,7 +24,7 @@ include_once('includes/php/config.php');
 	<div class="container-fluid">
 		<div class="col-xs-12 col-sm-4">
 			<div class="panel panel-medium white">
-				<div class="panel-heading">Autenticaciones</div>
+				<div class="panel-heading">Autenticaciones...</div>
 				<div class="panel-body">
 					<div class="col-xs-12">
 						<div class="box" id="1"></div>
