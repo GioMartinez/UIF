@@ -2,7 +2,6 @@
 include_once'config.php';
 include_once'nocInt.php';
 include_once'memInt.php';
-error_reporting(E_ALL);
 $NOC=new NOCface($nocAddr,$nocUser,$nocPass);
 $cache=new Cache($memAddr,$memPort,$memExpi);
 function getAllSeries(){
@@ -74,4 +73,8 @@ echo "<br>tree<br>";
 print_r($tree);
 $cache->set("expMan",$tree);
 $NOC->untie_from_NOC();
+//conexión a base de datos postgres en 10.57.220.193
+$conn_string = "host=10.57.220.193 dbname=uif user=nocuser password=n0v3ll";
+$dbconn4 = pg_connect($conn_string) or die('connection failed');
+
 ?>

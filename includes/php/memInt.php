@@ -13,7 +13,7 @@ class Cache{
 		$cacheBindSuccessful = $this->memory->addServer($server, $port);
 		if(!$cacheBindSuccessful){
 			error_log("Reinitializing cache at ".$server.":".$port."...");
-				$startCache = shell_exec('/usr/local/bin/memcached -d -m 1024 -u nobody -l '.$server.' -p '.$port);
+				$startCache = shell_exec('/usr/local/bin/memcached -d -m 4096 -u wwwrun -l '.$server.' -p '.$port);
 				while (shell_exec('netstat -an | grep '.$port) == null) {sleep(1);}
 				$this->memory = new Memcached;
 			$cacheBindSuccessful = $this->memory->addServer($server, $port);

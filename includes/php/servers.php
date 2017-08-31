@@ -1,5 +1,4 @@
 <?php
-error_reporting(E_ALL);
 if(isset($_POST)&&!empty($_POST)){
 	include_once'config.php';
 	include_once'nocInt.php';

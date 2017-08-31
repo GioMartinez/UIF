@@ -24,7 +24,7 @@ include_once('includes/php/config.php');
 	<div class="container-fluid">
 		<div class="col-xs-12 col-sm-4">
 			<div class="panel panel-medium white">
-				<div class="panel-heading">Autenticaciones...</div>
+				<div class="panel-heading">Total de Autenticaciones</div>
 				<div class="panel-body">
 					<div class="col-xs-12">
 						<div class="box" id="1"></div>
@@ -34,7 +34,7 @@ include_once('includes/php/config.php');
 		</div>
 		<div class="col-xs-12 col-sm-4">
 			<div class="panel panel-medium white">
-				<div class="panel-heading" data-toggle="tooltip" data-placement="bottom" title="Conexiones TCP establecidas en el clúster que soporta la plataforma de declaraciones">Conexiones TCP Establecidas</div>
+				<div class="panel-heading">Estado del Certificado (FIEL)</div>
 				<div class="panel-body">
 					<div class="col-xs-12">
 						<div class="box" id="2"></div>
@@ -44,7 +44,7 @@ include_once('includes/php/config.php');
 		</div>
 		<div class="col-xs-12 col-sm-4">
 			<div class="panel panel-medium white">
-				<div class="panel-heading" data-toggle="tooltip" data-placement="bottom" title="Tiempo que tarda en Cargar el Contrato">Tiempo del Proceso de Autenticación</div>
+				<div class="panel-heading">Estatus de la Autenticación</div>
 				<div class="panel-body">
 					<div class="col-xs-12">
 						<div class="box" id="3"></div>
@@ -63,69 +63,6 @@ include_once('includes/php/config.php');
 			</div>
 		</div>
 		<div class="col-xs-12 col-sm-7">
-			<div class="panel panel-medium white">
-				<div class="panel-heading">Experiencia de Usuario</div>
-				<div class="panel-body scroll">
-					<div class="col-xs-12">
-						<div class="box" id="8">
-							<table class="table table-hover" id="userExpTbl">
-								<tr>
-									<td>32D: Opinión del cumplimiento</td>
-									<td><button type="button" class="btn btn-success" id="exp-stat-32d" severity="1">OK</button></td>
-									<td class="col-xs-5" id="curp-spark"></td>
-								</tr>
-								<tr>
-									<td>CFDI</td>
-									<td><button type="button" class="btn btn-success" id="exp-stat-cfdi" severity="1">OK</button></td>
-									<td class="col-xs-5" id="cfdi-spark"></td>
-								</tr>
-								<tr>
-									<td>Citas</td>
-									<td><button type="button" class="btn btn-success" id="exp-stat-citas" severity="1">OK</button></td>
-									<td class="col-xs-5" id="pre-pm-spark"></td>
-								</tr>
-								<tr>
-									<td>Certisat</td>
-									<td><button type="button" class="btn btn-success" id="exp-stat-certisat" severity="1">OK</button></td>
-									<td class="col-xs-5" id="pre-pm2-spark"></td>
-								</tr>
-								<tr>
-									<td>Declaración Anual PF Asalariados</td>
-									<td><button type="button" class="btn btn-success" id="exp-stat-dapf" severity="1">OK</button></td>
-									<td class="col-xs-5" id="pre-pm3-spark"></td>
-								</tr>
-								<tr>
-									<td>DeclaraSAT</td>
-									<td><button type="button" class="btn btn-success" id="exp-stat-dsat" severity="1">OK</button></td>
-									<td class="col-xs-5" id="pre-pm4-spark"></td>
-								</tr>
-								<tr>
-									<td>DyC</td>
-									<td><button type="button" class="btn btn-success" id="exp-stat-dyc" severity="1">OK</button></td>
-									<td class="col-xs-5" id="pre-pm5-spark"></td>
-								</tr>
-								<tr>
-									<td>DyP</td>
-									<td><button type="button" class="btn btn-success" id="exp-stat-dyp" severity="1">OK</button></td>
-									<td class="col-xs-5" id="dyp-spark"></td>
-								</tr>
-								<tr>
-									<td>Envío de Declaraciones Anuales PM</td>
-									<td><button type="button" class="btn btn-success" id="exp-stat-dapm" severity="1">OK</button></td>
-									<td class="col-xs-5" id="pre-pm7-spark"></td>
-								</tr>
-								<tr>
-									<td>Mis Cuentas</td>
-									<td><button type="button" class="btn btn-success" id="exp-stat-mcu" severity="1">OK</button></td>
-									<td class="col-xs-5" id="pre-pm8-spark"></td>
-								</tr>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="col-xs-12 col-sm-8">
 			<div class="panel panel-medium white">
 				<div class="panel-heading">Infraestructura</div>
 				<div class="panel-body">
@@ -204,15 +141,6 @@ include_once('includes/php/config.php');
 										<button type="button" id="Directorios-DASI-Wr" class="btn btn-warning">0</button>
 										<button type="button" id="Directorios-DASI-Cr" class="btn btn-danger">0</button>
 										<button type="button" id="Directorios-DASI-In" class="btn btn-info">0</button>
-									</td>
-								</tr>
-								<tr>
-									<td>Balanceos<i class="fa fa-server" aria-hidden="true"></i></td>
-									<td data-toggle="modal" data-target="#modal-Balanceo" data-whatever="Balanceo">
-										<button type="button" id="Balanceo-OK" class="btn btn-success">0</button>
-										<button type="button" id="Balanceo-Wr" class="btn btn-warning">0</button>
-										<button type="button" id="Balanceo-Cr" class="btn btn-danger">0</button>
-										<button type="button" id="Balanceo-In" class="btn btn-info">0</button>
 									</td>
 								</tr>
 							</table>

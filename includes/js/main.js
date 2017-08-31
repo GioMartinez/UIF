@@ -35,6 +35,7 @@ $(function(){ // document ready
 		navigator:{enabled:false},
 		scrollbar:{enabled:false},
 		rangeSelector:{
+			inputEnabled:false,
 			selected:0,
 			allButtonsEnabled:true,
 			buttons:[{
@@ -49,6 +50,10 @@ $(function(){ // document ready
 				type:'month',
 				count:1,
 				text:'1m'
+			},{
+				type:'month',
+				count:3,
+				text:'3m'
 			}]
 		},
 		plotOptions:{series:{dataGrouping:{enabled:true}}},
@@ -61,230 +66,66 @@ $(function(){ // document ready
 			opposite:false,
 			labels:{enabled:true}
 		},
-		series:[{data:[]},{data:[]},{data:[]}]
-	};
-	var timeOptions={
-		chart:{
-			type:'areaspline',
-			marginRight:60,
-			marginBottom:15,
-			marginLeft:30,
-			spacing:[0,0,0,0]
-		},
-		legend:{
-			layout:'vertical',
-			enabled:true,
-			align:'right',
-			verticalAlign:'middle'
-		},
-		exporting:{
-			buttons:{
-				contextButton:{
-					menuItems:[{
-						textKey:'downloadJPEG',
-						onclick:function(){this.exportChart({type:'image/jpeg'});}
-					},{
-						textKey:'downloadPDF',
-						onclick:function(){this.exportChart({type:'application/pdf'});}
-					},{
-						textKey:'downloadCSV',
-						onclick:function(){this.downloadCSV();}
-					},{
-						textKey:'downloadXLS',
-						onclick:function(){this.downloadXLS();}
-					}]
-				}
-			}
-		},
-		navigator:{enabled:false},
-		scrollbar:{enabled:false},
-		rangeSelector:{
-			selected:0,
-			allButtonsEnabled:true,
-			buttons:[{
-				type:'day',
-				count:1,
-				text:'1d'
-			},{
-				type:'week',
-				count:1,
-				text:'1w'
-			},{
-				type:'month',
-				count:1,
-				text:'1m'
-			}]
-		},
-		plotOptions:{series:{dataGrouping:{enabled:true}}},
-		xAxis:{
-			visible:true,
-			labels:{enabled:true}
-		},
-		yAxis:{
-			visible:true,
-			labels:{
-				enabled:true,
-				formatter:function(){
-					if(this.value>1000){return (this.value/1000).toFixed(1)+"s";}
-					else{return (this.value)+"ms";}
-				}
-			},
-			plotBands:[{
-				color:'rgba(209,16,16,0.2)',
-				from:2500,
-				to:30000
-			}],
-		},
-		series:[{data:[]},{data:[]},{data:[]}]
-	};
-	var sparkOptions={
-		chart:{type:'areaspline'},
-		exporting:{enabled:false},
-		tooltip:{pointFormat:'<span style="color:{point.color}">\u25CF</span> <b>{point.y}</b><br/>',},
 		series:[{data:[]}]
 	};
-	var loginCFDI={series:"login",property:"CFDI"};
-	var loginCNTC={series:"login",property:"CNTC"};
-	var loginDYP={series:"login",property:"DYP"};
-	var connCFDI={series:"conn",property:"CFDI"};
-	var connCONT={series:"conn",property:"CONT"};
-	var connDYP={series:"conn",property:"DYP"};
-	var timeCFDI={series:"time",property:"CFDI"};
-	var timeDYP={series:"time",property:"DYP"};
-	var timePTSC={series:"time",property:"PTSC"};
-	var authCFDI={series:"auth",property:"CFDI"};
-	var authCNTC={series:"auth",property:"CNTC"};
-	var authCNTE={series:"auth",property:"CNTE"};
-	var expCFDI={series:"expMan",property:"CFDI"};
-	var expDYP={series:"expMan",property:"DYP"};
+	// mis llamadas
+	var activosFIEL={series:"fiel",property:"activos"};
+	var revocadosFIEL={series:"fiel",property:"revocados"};
+	var caducosFIEL={series:"fiel",property:"caducos"};
+	var autenticadosFIEL={series:"fiel",property:"autenticados"};
+	var noautenticadosFIEL={series:"fiel",property:"noautenticados"};
+	var loginsAUTH={series:"auth",property:"logins"};
+	var logoutsAUTH={series:"auth",property:"logouts"};
+	var intentosAUTH={series:"auth",property:"intentos"};
+	//inicialización de contenedores de gráficas
+	normalOptions.series=[{data:[]}];
+	normalOptions.legend.enabled=false;
+	normalOptions.chart.marginRight=20;
 	loginChart=Highcharts.stockChart("1",normalOptions);
 	normalOptions.series=[{data:[]},{data:[]},{data:[]}];
+	normalOptions.legend.enabled=true;
 	connChart=Highcharts.stockChart("2",normalOptions);
-	timeChart=Highcharts.stockChart("3",timeOptions);
-	normalOptions.series=[{data:[]},{data:[]},{data:[]}];
+	normalOptions.series=[{data:[]},{data:[]}];
+	timeChart=Highcharts.stockChart("3",normalOptions);
+	normalOptions.series=[{data:[]}];
+	normalOptions.legend.enabled=false;
 	authChart=Highcharts.stockChart("4",normalOptions);
-	curpSpark=Highcharts.chart("curp-spark",sparkOptions);
-	prepfSpark=Highcharts.chart("pre-pm3-spark",sparkOptions);
-	prepmSpark=Highcharts.chart("pre-pm2-spark",sparkOptions);
-	cfdiSpark=Highcharts.chart("cfdi-spark",sparkOptions);
-	dypSpark=Highcharts.chart("dyp-spark",sparkOptions);
-	prepm4Spark=Highcharts.chart("pre-pm4-spark",sparkOptions);
-	prepm5Spark=Highcharts.chart("pre-pm5-spark",sparkOptions);
-	prepm6Spark=Highcharts.chart("pre-pm-spark",sparkOptions);
-	prepm7Spark=Highcharts.chart("pre-pm7-spark",sparkOptions);
-	prepm8Spark=Highcharts.chart("pre-pm8-spark",sparkOptions);
 	function update(){
 		if(typeof(authChart.series[2]) !== "undefined"){authChart.series[2].remove(true);}
-		$.post('includes/php/render.php',loginCFDI,function(result){
+		$.post('includes/php/render.php',loginsAUTH,function(result){
 			loginChart.series[0].setData(result);
-			loginChart.legend.allItems[0].update({name:"CFDI"});
-			loginChart.legend.allItems[0].update({zones:[{value:40000},{value:2000000,color:'rgba(128,0,0,1)'}]});
+			//loginChart.legend.allItems[0].update({name:"Logins"},true);
 			loginChart.redraw();
 		},"json");
-		$.post('includes/php/render.php',loginCNTC,function(result){
-			loginChart.series[1].setData(result);
-			loginChart.legend.allItems[1].update({name:"CNTC"});
-			loginChart.legend.allItems[1].update({zones:[{value:10000},{value:2000000,color:'rgba(128,0,0,1)'}]});
-			loginChart.redraw();
-		},"json");
-		$.post('includes/php/render.php',loginDYP,function(result){
-			loginChart.series[2].setData(result);
-			loginChart.legend.allItems[2].update({name:"DYP"});
-			loginChart.legend.allItems[2].update({zones:[{value:20000},{value:2000000,color:'rgba(128,0,0,1)'}]});
-			loginChart.redraw();
-		},"json");
-		$.post('includes/php/render.php',connCFDI,function(result){
+		$.post('includes/php/render.php',activosFIEL,function(result){
 			connChart.series[0].setData(result);
-			connChart.legend.allItems[0].update({name:"CFDI"});
-			connChart.legend.allItems[0].update({zones:[{value:200},{value:2000000,color:'rgba(128,0,0,1)'}]});
+			connChart.legend.allItems[0].update({name:"Activo"});
 			connChart.redraw();
 		},"json");
-		$.post('includes/php/render.php',connCONT,function(result){
+		$.post('includes/php/render.php',revocadosFIEL,function(result){
 			connChart.series[1].setData(result);
-			connChart.legend.allItems[1].update({name:"CNTC"});
-			connChart.legend.allItems[1].update({zones:[{value:30000},{value:2000000,color:'rgba(128,0,0,1)'}]});
+			connChart.legend.allItems[1].update({name:"Revocado"});
 			connChart.redraw();
 		},"json");
-		$.post('includes/php/render.php',connDYP,function(result){
+		$.post('includes/php/render.php',caducosFIEL,function(result){
 			connChart.series[2].setData(result);
-			connChart.legend.allItems[2].update({name:"DYP"});
-			connChart.legend.allItems[2].update({zones:[{value:15000},{value:2000000,color:'rgba(128,0,0,1)'}]});
+			connChart.legend.allItems[2].update({name:"Caduco"});
 			connChart.redraw();
 		},"json");
-		$.post('includes/php/render.php',timeCFDI,function(result){
+		$.post('includes/php/render.php',autenticadosFIEL,function(result){
 			timeChart.series[0].setData(result);
-			timeChart.legend.allItems[0].update({name:"CFDI"});
+			timeChart.legend.allItems[0].update({name:"Exitosas"});
 			timeChart.redraw();
-			// test for exp man
-			curpSpark.series[0].setData(result);
-			curpSpark.redraw();
-			//end test for exp man
 		},"json");
-		$.post('includes/php/render.php',timePTSC,function(result){
+		$.post('includes/php/render.php',noautenticadosFIEL,function(result){
 			timeChart.series[1].setData(result);
-			timeChart.legend.allItems[1].update({name:"CNTC"});
+			timeChart.legend.allItems[1].update({name:"No Exitosas"});
 			timeChart.redraw();
-			// test for exp man
-			prepfSpark.series[0].setData(result);
-			prepfSpark.redraw();
-			//end test for exp man
 		},"json");
-		$.post('includes/php/render.php',timeDYP,function(result){
-			timeChart.series[2].setData(result);
-			timeChart.legend.allItems[2].update({name:"DYP"});
-			timeChart.redraw();
-			// test for exp man
-			prepmSpark.series[0].setData(result);
-			prepmSpark.redraw();
-			prepm4Spark.series[0].setData(result);
-			prepm4Spark.redraw();
-			prepm5Spark.series[0].setData(result);
-			prepm5Spark.redraw();
-			prepm6Spark.series[0].setData(result);
-			prepm6Spark.redraw();
-			prepm7Spark.series[0].setData(result);
-			prepm7Spark.redraw();
-			prepm8Spark.series[0].setData(result);
-			prepm8Spark.redraw();
-			//end test for exp man
-		},"json");
-		$.post('includes/php/render.php',expCFDI,function(result){
-			cfdiSpark.series[0].setData(result);
-			cfdiSpark.redraw();
-		},"json");
-		$.post('includes/php/render.php',expDYP,function(result){
-			dypSpark.series[0].setData(result);
-			dypSpark.redraw();
-		},"json");
-		$.post('includes/php/render.php',authCFDI,function(result){
+		$.post('includes/php/render.php',intentosAUTH,function(result){
 			authChart.series[0].setData(result);
-			authChart.legend.allItems[0].update({name:"CFDI"});
+			//authChart.legend.allItems[0].update({name:"Intentos"});
 			authChart.redraw();
-		},"json");
-		$.post('includes/php/render.php',authCNTC,function(result){
-			authChart.series[1].setData(result);
-			authChart.legend.allItems[1].update({name:"CNTC"});
-			authChart.redraw();
-		},"json");
-		$.post('includes/php/render.php',{data:"expMan"},function(result){
-			for(var i in result.children){
-				var severity=0;
-				var expClass="btn btn-default";
-				if(result.children[i].condition=="OK"){severity=1;expClass="btn btn-success";}
-				else if((result.children[i].condition=="MINOR")||(result.children[i].condition=="MAJOR")){severity=2;expClass="btn btn-warning";}
-				else if(result.children[i].condition=="CRITICAL"){severity=3;expClass="btn btn-danger";}
-				else{severity=4;expClass="btn btn-info";}
-				if(result.children[i].name.indexOf("DyP-Cont")>-1){
-					$("#exp-stat-dyp").text(result.children[i].condition);
-					$("#exp-stat-dyp").attr("severity",severity);
-					$("#exp-stat-dyp").attr("class",expClass);
-				}
-				if(result.children[i].name.indexOf("DyP-Cont")>-1){
-					$("#exp-stat-cfdi").text(result.children[i].condition);
-					$("#exp-stat-cfdi").attr("severity",severity);
-					$("#exp-stat-cfdi").attr("class",expClass);
-				}
-			}
 		},"json");
 		$.post('includes/php/render.php',{data:"root"},function(result){
 			for(var i in result.children){ // get the different areas
@@ -486,16 +327,6 @@ $(function(){ // document ready
 					}
 				},"json");
 			});
-			function sortTable(table,col,reverse){
-				var tb=table.tBodies[0],
-				tr=Array.prototype.slice.call(tb.rows,0),
-				i;
-				reverse= -((+reverse)||-1);
-				tr=tr.sort(function(a,b){return reverse*(a.cells[col].childNodes[0].attributes.severity.value.localeCompare(b.cells[col].childNodes[0].attributes.severity.value));});
-				for(i=0;i<tr.length;++i)tb.appendChild(tr[i]); // append each row in order
-			}
-			var table=document.getElementById('userExpTbl');
-			sortTable(table,1,true);
 		},"json");
 		window.setTimeout(function(){
 		},5000);
