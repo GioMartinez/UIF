@@ -16,19 +16,12 @@ $(function(){ // document ready
 		exporting:{
 			buttons:{
 				contextButton:{
-					menuItems:[{
-						textKey:'downloadJPEG',
-						onclick:function(){this.exportChart({type:'image/jpeg'});}
-					},{
-						textKey:'downloadPDF',
-						onclick:function(){this.exportChart({type:'application/pdf'});}
-					},{
-						textKey:'downloadCSV',
-						onclick:function(){this.downloadCSV();}
-					},{
-						textKey:'downloadXLS',
-						onclick:function(){this.downloadXLS();}
-					}]
+					menuItems:[
+						{textKey:'downloadJPEG',onclick:function(){this.exportChart({type:'image/jpeg'});}},
+						{textKey:'downloadPDF',onclick:function(){this.exportChart({type:'application/pdf'});}},
+						{textKey:'downloadCSV',onclick:function(){this.downloadCSV();}},
+						{textKey:'downloadXLS',onclick:function(){this.downloadXLS();}}
+					]
 				}
 			}
 		},
@@ -38,26 +31,16 @@ $(function(){ // document ready
 			inputEnabled:false,
 			selected:0,
 			allButtonsEnabled:true,
-			buttons:[{
-				type:'day',
-				count:1,
-				text:'1d'
-			},{
-				type:'week',
-				count:1,
-				text:'1w'
-			},{
-				type:'month',
-				count:1,
-				text:'1m'
-			},{
-				type:'month',
-				count:3,
-				text:'3m'
-			}]
+			buttons:[
+				{type:'day',count:1,text:'1d'},
+				{type:'week',count:1,text:'1w'},
+				{type:'month',count:1,text:'1m'},
+				{type:'month',count:3,text:'3m'}
+			]
 		},
 		plotOptions:{series:{dataGrouping:{enabled:true}}},
 		xAxis:{
+			type:'datetime',
 			visible:true,
 			labels:{enabled:true}
 		},
@@ -91,10 +74,12 @@ $(function(){ // document ready
 	normalOptions.legend.enabled=false;
 	authChart=Highcharts.stockChart("4",normalOptions);
 	function update(){
+		var x = (new Date()).getTime();
 		if(typeof(authChart.series[2]) !== "undefined"){authChart.series[2].remove(true);}
 		$.post('includes/php/render.php',loginsAUTH,function(result){
 			loginChart.series[0].setData(result);
-			//loginChart.legend.allItems[0].update({name:"Logins"},true);
+			var setExtremes = loginChart.xAxis[0].max == loginChart.xAxis[0].dataMax && loginChart.fixedRange;
+			if(setExtremes){loginChart.xAxis[0].setExtremes(x - loginChart.fixedRange, x);}
 			loginChart.redraw();
 		},"json");
 		$.post('includes/php/render.php',activosFIEL,function(result){
@@ -110,6 +95,8 @@ $(function(){ // document ready
 		$.post('includes/php/render.php',caducosFIEL,function(result){
 			connChart.series[2].setData(result);
 			connChart.legend.allItems[2].update({name:"Caduco"});
+			var setExtremes = connChart.xAxis[0].max == connChart.xAxis[0].dataMax && connChart.fixedRange;
+			if(setExtremes){connChart.xAxis[0].setExtremes(x - connChart.fixedRange, x);}
 			connChart.redraw();
 		},"json");
 		$.post('includes/php/render.php',autenticadosFIEL,function(result){
@@ -120,11 +107,14 @@ $(function(){ // document ready
 		$.post('includes/php/render.php',noautenticadosFIEL,function(result){
 			timeChart.series[1].setData(result);
 			timeChart.legend.allItems[1].update({name:"No Exitosas"});
+			var setExtremes = timeChart.xAxis[0].max == timeChart.xAxis[0].dataMax && timeChart.fixedRange;
+			if(setExtremes){timeChart.xAxis[0].setExtremes(x - timeChart.fixedRange, x);}
 			timeChart.redraw();
 		},"json");
 		$.post('includes/php/render.php',intentosAUTH,function(result){
 			authChart.series[0].setData(result);
-			//authChart.legend.allItems[0].update({name:"Intentos"});
+			var setExtremes = authChart.xAxis[0].max == authChart.xAxis[0].dataMax && authChart.fixedRange;
+			if(setExtremes){authChart.xAxis[0].setExtremes(x - authChart.fixedRange, x);}
 			authChart.redraw();
 		},"json");
 		$.post('includes/php/render.php',{data:"root"},function(result){
