@@ -2,65 +2,33 @@
 include_once'config.php';
 include_once'nocInt.php';
 include_once'memInt.php';
+error_reporting(E_ALL);
 $NOC=new NOCface($nocAddr,$nocUser,$nocPass);
 $cache=new Cache($memAddr,$memPort,$memExpi);
-function flood($dn,$tree,$depth){
+function getAllSeries(){
 	global$NOC;
 	global$cache;
-	$depth=$depth+1;
-	if($depth<5){
-	$result=$NOC->getChilds($dn);
-	if(isset($result['DName'])){
-		$tree=array("name"=>$result['displayName']);
-		$tree+=array("condition"=>$result['condition']);
-		$tree+=array("dname"=>$result['DName']);
-		$childRight='rightRelationshipInfo';
-		if(isset($result[$childRight]['item'])){
-			if(isset($result[$childRight]['item']['relatedDName'])){
-				$tree+=array("children"=>array(0=>""));
-				$tree['children'][0]=flood($result[$childRight]['item']['relatedDName'],$tree['children'][0],$depth);
-				if(empty($tree['children'][0])){unset($tree['children']);}
-			}
-			else{
-				if($childRight == 'rightRelationshipInfo'){
-					$tree+=array("children"=>array());
-					foreach($result[$childRight]['item']as$key=>$value){
-						$tree['children']+=array($key=>"");
-						$tree['children'][$key]=flood($value['relatedDName'],$tree['children'][$key],$depth);
-						if($tree['children'][$key]==''){unset($tree['children'][$key]);}
-					}
-					if(empty($tree['children'])){unset($tree['children']);}
-				}
-				else{
-					$tree+=array("children"=>array());
-					foreach($result[$childRight]['item']as$key=>$value){
-						$tree['children']+=array($key=>"");
-						$tree['children'][$key]=flood($value,$tree['children'][$key],$depth);
-						if($tree['children'][$key]==''){unset($tree['children'][$key]);}
-					}
-					if(empty($tree['children'])){unset($tree['children']);}
-				}
-			}
+	global$timeOffset;
+	global$seriesNames;
+	foreach($seriesNames as $graph => $pltfrm){
+		foreach($pltfrm as $key => $value){
+			$last = $cache->get($graph."_".$key);
+			$temp=$NOC->mySeries($value['DN'],$timeOffset,$value['value'],$value['profile']);
+			$cache->set($graph."_".$key,$temp);
+			$NOC->allSeries=null;
 		}
 	}
-		
-	};
-	return$tree;
 }
-$tree=array();
-$tree=flood($root,$tree,0);
-echo "tree<br>";
-print_r($tree);
-$cache->set("root",$tree);
+//getAllSeries();
 $NOC->untie_from_NOC();
 $conn_string = "host=10.57.220.193 dbname=uif user=nocuser password=n0v3ll";
 $db1conn = pg_connect($conn_string) or die('connection failed');
-$resultFiel = pg_query($db1conn, "SELECT distinct 'AuthFielCont' as nombre, now()::timestamp (0) as fechahora,
-(select count(tipomovimiento) as Activos from detallefielcont where tipomovimiento = 'Activo' and age(now(), fechahora) < '30 minutes') as activo,
-(select count(tipomovimiento) as Revocados from detallefielcont where tipomovimiento = 'Revocado' and age(now(), fechahora) < '30 minutes') as revocado,
-(select count(tipomovimiento) as Caducos from detallefielcont where tipomovimiento = 'Caduco' and age(now(), fechahora) < '30 minutes') as caduco,
-(select count(tipomovimiento) as TipoMovimiento from detallefielcont where tipomovimiento = 'Autenticado' and age(now(), fechahora) < '30 minutes') as autenticado,
-(select count(tipomovimiento) as TipoMovimiento from detallefielcont where tipomovimiento = 'NO Autenticado' and age(now(), fechahora) < '30 minutes') as noautenticado;");
+$resultFiel = pg_query($db1conn, "select distinct 'FielCont' as nombre, now()::timestamp (0) as fechahora, 
+(select count(tipomovimiento) as TipoMovimiento from detallefielcont where tipomovimiento = 'Activo' and TO_CHAR(fechahora, 'yyyy-mm-dd hh12:mi:ss') > TO_CHAR(now() - interval '40 min', 'yyyy-mm-dd hh12:mi:ss')) as Activo,
+(select count(tipomovimiento) as TipoMovimiento from detallefielcont where tipomovimiento = 'Revocado' and TO_CHAR(fechahora, 'yyyy-mm-dd hh12:mi:ss') > TO_CHAR(now() - interval '40 min', 'yyyy-mm-dd hh12:mi:ss')) as Revocado,
+(select count(tipomovimiento) as TipoMovimiento from detallefielcont where tipomovimiento = 'Caduco' and TO_CHAR(fechahora, 'yyyy-mm-dd hh12:mi:ss') > TO_CHAR(now() - interval '40 min', 'yyyy-mm-dd hh12:mi:ss')) as Caduco,
+(select count(tipomovimiento) as TipoMovimiento from detallefielcont where tipomovimiento = 'Autenticado' and TO_CHAR(fechahora, 'yyyy-mm-dd hh12:mi:ss') > TO_CHAR(now() - interval '40 min', 'yyyy-mm-dd hh12:mi:ss')) as Autenticado,
+(select count(tipomovimiento) as TipoMovimiento from detallefielcont where tipomovimiento = 'NO Autenticado' and TO_CHAR(fechahora, 'yyyy-mm-dd hh12:mi:ss') > TO_CHAR(now() - interval '40 min', 'yyyy-mm-dd hh12:mi:ss')) as NOAutenticado;");
 $resultAuth = pg_query($db1conn, "select distinct 'ResumenAuth' as Nombre,now()::timestamp (0) as FechaHora,
 SUM(Login) as Login,SUM(Logout) as Logout,SUM(Hits) as Intentos
 from resumenauth where FechaHoraInicial > now()::timestamp (0) - interval '20 min';");
